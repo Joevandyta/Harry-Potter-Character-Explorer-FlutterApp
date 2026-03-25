@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -288,7 +289,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildCharacterCard(CharacterModel character, House house) {
     final house = HouseExtension.fromString(character.house);
-
     final primaryColor = house.primaryColor;
     final secondaryColor = house.secondaryColor;
 
@@ -309,6 +309,21 @@ class _HomeScreenState extends State<HomeScreen>
         aspectRatio: 3,
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final nameFont = constraints.maxWidth < 500
+                ? 18.0         // HP kecil
+                : constraints.maxWidth < 700
+                ? 24.0     // HP normal / tablet portrait
+                : 32.0;    // tablet landscape / web
+            final subInfo = constraints.maxWidth < 500
+                ? 10.0         // HP kecil
+                : constraints.maxWidth < 700
+                ? 16.0     // HP normal / tablet portrait
+                : 20.0;    // tablet landscape / web
+            final iconSize = constraints.maxWidth < 500
+                ? 7.0         // HP kecil
+                : constraints.maxWidth < 700
+                ? 10.0     // HP normal / tablet portrait
+                : 10.0;    // tablet landscape / web
             return ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Stack(
@@ -357,11 +372,12 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 character.name,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: nameFont,
                                   fontWeight: FontWeight.w700,
                                   color: secondaryColor,
                                 ),
@@ -388,15 +404,17 @@ class _HomeScreenState extends State<HomeScreen>
                                   child: Text(
                                     house.displayName,
                                     style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: subInfo,
                                       color: secondaryColor,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
+                              const SizedBox(height: 4),
                               _miniInfo(
                                 Icons.shield_outlined,
                                 character.ancestry,
+                                subInfo
                               ),
                               Spacer(),
                               Align(
@@ -412,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Container(
-                                        width: 7, height: 7,
+                                        width: iconSize, height: iconSize,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: character.alive ? Colors.greenAccent : Colors.redAccent,
@@ -422,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       Text(
                                         character.alive ? 'Alive' : 'Deceased',
                                         style: TextStyle(
-                                          fontSize: 10,
+                                          fontSize: subInfo,
                                           color: character.alive ? Colors.greenAccent : Colors.redAccent,
                                         ),
                                       ),
@@ -445,16 +463,16 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _miniInfo(IconData icon, String? value) {
+  Widget _miniInfo(IconData icon, String? value, double size) {
     if (value == null || value.isEmpty) return SizedBox.shrink();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 11, color: Color(0xFFAAAAAA)),
+        Icon(icon, size: size, color: Color(0xFFAAAAAA)),
         SizedBox(width: 3),
         Text(
           value,
-          style: TextStyle(fontSize: 11, color: Color(0xFFAAAAAA)),
+          style: TextStyle(fontSize: size, color: Color(0xFFAAAAAA)),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
