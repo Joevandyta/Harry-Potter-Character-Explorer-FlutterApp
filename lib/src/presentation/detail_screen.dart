@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:harry_potter_char_app/domain/models/character_model.dart';
-import 'package:harry_potter_char_app/domain/models/house_name.dart';
+import 'package:harry_potter_char_app/src/domain/models/character_model.dart';
+import 'package:harry_potter_char_app/src/domain/models/house_name.dart';
 
 class DetailScreen extends StatefulWidget {
   final CharacterModel characterDetail;
@@ -31,8 +31,9 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: textContainerColor,
+      backgroundColor: widget.house.primaryColor,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: widget.house.primaryColor,
@@ -45,6 +46,11 @@ class _DetailScreenState extends State<DetailScreen> {
             title: Text(widget.characterDetail.name),
           ),
           SliverToBoxAdapter(child: _characterDetailBody()),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            fillOverscroll: true,
+            child: Container(color: textContainerColor),
+          ),
         ],
       ),
     );
@@ -132,7 +138,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   imageUrl: char.image.toString(),
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
-                  errorWidget: (_, __, ___) => Container(
+                  errorWidget: (_, _, _) => Container(
                     color: widget.house.primaryColor.withValues(alpha: 0.3),
                     child: Container(
                       color: Colors.white,
@@ -208,7 +214,6 @@ class _DetailScreenState extends State<DetailScreen> {
                   _sectionLabel('Personal Info'),
                   SizedBox(height: 12),
 
-
                   _buildInfoGrid(widget.characterDetail),
                   SizedBox(height: 20),
 
@@ -252,42 +257,59 @@ class _DetailScreenState extends State<DetailScreen> {
     ),
   );
 
-  Widget _statItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
-        ),
-        SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
   Widget _buildInfoGrid(CharacterModel char) {
-    final items = <Map<String, dynamic>>[
-      {'icon': Icons.person_outline, 'label': 'Species', 'value': char.species},
-      {'icon': Icons.wc, 'label': 'Gender', 'value': char.gender},
-      {'icon': Icons.cake_outlined, 'label': 'Date of Birth', 'value': char.dateOfBirth},
-      {'icon': Icons.shield_outlined, 'label': 'Ancestry', 'value': char.ancestry},
-      {'icon': Icons.visibility_outlined, 'label': 'Eye Colour', 'value': char.eyeColour},
-      {'icon': Icons.face_outlined, 'label': 'Hair Colour', 'value': char.hairColour},
-      {'icon': Icons.pets_outlined, 'label': 'Patronus', 'value': char.patronus},
-      {'icon': Icons.movie_outlined, 'label': 'Actor', 'value': char.actor},
-    ].where((e) => e['value'] != null && (e['value'] as String).isNotEmpty).toList();
+    final items =
+        <Map<String, dynamic>>[
+              {
+                'icon': Icons.person_outline,
+                'label': 'Species',
+                'value': char.species,
+              },
+              {'icon': Icons.wc, 'label': 'Gender', 'value': char.gender},
+              {
+                'icon': Icons.cake_outlined,
+                'label': 'Date of Birth',
+                'value': char.dateOfBirth,
+              },
+              {
+                'icon': Icons.shield_outlined,
+                'label': 'Ancestry',
+                'value': char.ancestry,
+              },
+              {
+                'icon': Icons.visibility_outlined,
+                'label': 'Eye Colour',
+                'value': char.eyeColour,
+              },
+              {
+                'icon': Icons.face_outlined,
+                'label': 'Hair Colour',
+                'value': char.hairColour,
+              },
+              {
+                'icon': Icons.pets_outlined,
+                'label': 'Patronus',
+                'value': char.patronus,
+              },
+              {
+                'icon': Icons.movie_outlined,
+                'label': 'Actor',
+                'value': char.actor,
+              },
+            ]
+            .where(
+              (e) => e['value'] != null && (e['value'] as String).isNotEmpty,
+            )
+            .toList();
 
     return LayoutBuilder(
       builder: (context, constraints) {
         // Responsive: kolom berdasarkan lebar
         final crossAxisCount = constraints.maxWidth < 400
-            ? 2         // HP kecil
+            ? 2 // HP kecil
             : constraints.maxWidth < 700
-            ? 2     // HP normal / tablet portrait
-            : 3;    // tablet landscape / web
+            ? 2 // HP normal / tablet portrait
+            : 3; // tablet landscape / web
 
         final childAspectRatio = constraints.maxWidth < 400 ? 2.5 : 3.0;
 
@@ -308,7 +330,8 @@ class _DetailScreenState extends State<DetailScreen> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              final isRightColumn = index % crossAxisCount == crossAxisCount - 1;
+              final isRightColumn =
+                  index % crossAxisCount == crossAxisCount - 1;
               final isOddTotal = items.length % crossAxisCount != 0;
               final itemsInLastRow = isOddTotal
                   ? items.length % crossAxisCount
@@ -316,24 +339,34 @@ class _DetailScreenState extends State<DetailScreen> {
               final lastRowStartIndex = items.length - itemsInLastRow;
               final isLastRow = index >= lastRowStartIndex;
               final isLastItem = index == items.length - 1;
-              final isAloneInLastRow = isOddTotal && isLastItem && itemsInLastRow == 1;
+              final isAloneInLastRow =
+                  isOddTotal && isLastItem && itemsInLastRow == 1;
 
               return LayoutBuilder(
                 builder: (context, gridBuilder) {
                   final itemWidth = gridBuilder.maxWidth;
 
-                  final iconSize = itemWidth < 250 ? 16.0
-                      : itemWidth < 350 ? 32.0
-                      : itemWidth < 700 ? 48.0
+                  final iconSize = itemWidth < 250
+                      ? 16.0
+                      : itemWidth < 350
+                      ? 32.0
+                      : itemWidth < 700
+                      ? 48.0
                       : 50.0;
-                  final labelFontSize = itemWidth < 250 ? 12.0
-                      : itemWidth < 350 ? 14.0
-                      : itemWidth < 700 ? 16.0
+                  final labelFontSize = itemWidth < 250
+                      ? 12.0
+                      : itemWidth < 350
+                      ? 14.0
+                      : itemWidth < 700
+                      ? 16.0
                       : 18.0;
 
-                  final valueFontSize = itemWidth < 250 ? 12.0
-                      : itemWidth < 350 ? 15.0
-                      : itemWidth < 700 ? 18.0
+                  final valueFontSize = itemWidth < 250
+                      ? 12.0
+                      : itemWidth < 350
+                      ? 15.0
+                      : itemWidth < 700
+                      ? 18.0
                       : 20.0;
 
                   return Container(
@@ -341,9 +374,15 @@ class _DetailScreenState extends State<DetailScreen> {
                       border: Border(
                         bottom: isLastRow
                             ? BorderSide.none
-                            : BorderSide(color: Colors.grey.shade200, width: 0.8),
+                            : BorderSide(
+                                color: Colors.grey.shade200,
+                                width: 0.8,
+                              ),
                         right: isAloneInLastRow || isRightColumn
-                            ? BorderSide(color: Colors.grey.shade200, width: 0.8)
+                            ? BorderSide(
+                                color: Colors.grey.shade200,
+                                width: 0.8,
+                              )
                             : BorderSide.none,
                       ),
                     ),
@@ -353,7 +392,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         Container(
                           padding: EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: widget.house.primaryColor.withValues(alpha: 0.15),
+                            color: widget.house.primaryColor.withValues(
+                              alpha: 0.15,
+                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
@@ -390,108 +431,12 @@ class _DetailScreenState extends State<DetailScreen> {
                       ],
                     ),
                   );
-                }
+                },
               );
             },
           ),
         );
       },
-    );
-  }
-  Widget _buildInfoGrid2(CharacterModel char) {
-    final items = <Map<String, dynamic>>[
-      {'icon': Icons.person_outline, 'label': 'Species', 'value': char.species},
-      {'icon': Icons.wc, 'label': 'Gender', 'value': char.gender},
-      {'icon': Icons.cake_outlined, 'label': 'Date of Birth', 'value': char.dateOfBirth},
-      {'icon': Icons.shield_outlined, 'label': 'Ancestry', 'value': char.ancestry},
-      {'icon': Icons.visibility_outlined, 'label': 'Eye Colour', 'value': char.eyeColour},
-      {'icon': Icons.face_outlined, 'label': 'Hair Colour', 'value': char.hairColour},
-      {'icon': Icons.pets_outlined, 'label': 'Patronus', 'value': char.patronus},
-      {'icon': Icons.movie_outlined, 'label': 'Actor', 'value': char.actor},
-    ].where((e) => e['value'] != null && (e['value'] as String).isNotEmpty).toList();
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: GridView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 2.8,
-        ),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          final isRightColumn = index % 2 == 0;
-          final isOddTotal = items.length % 2 == 1;
-          final isLastRow = isOddTotal
-              ? index == items.length - 1      // odd: last row = 1 item
-              : index >= items.length - 2;
-
-          final isLastItem = index == items.length - 1;
-          final isAloneInLastRow = isOddTotal && isLastItem;
-
-          return Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: isLastRow
-                    ? BorderSide.none
-                    : BorderSide(color: Colors.grey.shade200, width: 0.8),
-                right: isAloneInLastRow || isRightColumn
-                    ? BorderSide(color: Colors.grey.shade200, width: 0.8)
-                    : BorderSide.none,
-              ),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    color: widget.house.primaryColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    item['icon'] as IconData,
-                    size: 16,
-                    color: widget.house.primaryColor,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        item['label'] as String,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        item['value'] as String,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -500,16 +445,16 @@ class _DetailScreenState extends State<DetailScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final labelFont = constraints.maxWidth < 400
-            ? 12.0         // HP kecil
+            ? 12.0 // HP kecil
             : constraints.maxWidth < 700
-            ? 16.0     // HP normal / tablet portrait
-            : 18.0;    // tablet landscape / web
+            ? 16.0 // HP normal / tablet portrait
+            : 18.0; // tablet landscape / web
 
         final valueFont = constraints.maxWidth < 400
-            ? 12.0         // HP kecil
+            ? 12.0 // HP kecil
             : constraints.maxWidth < 700
-            ? 16.0     // HP normal / tablet portrait
-            : 18.0;    // tablet landscape / web
+            ? 16.0 // HP normal / tablet portrait
+            : 18.0; // tablet landscape / web
         return Row(
           children: [
             Expanded(
@@ -524,11 +469,14 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             Text(
               value,
-              style: TextStyle(fontSize: valueFont, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                fontSize: valueFont,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         );
-      }
+      },
     );
   }
 
