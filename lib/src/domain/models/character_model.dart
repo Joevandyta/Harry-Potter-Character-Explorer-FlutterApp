@@ -52,8 +52,7 @@ class CharacterModel {
     required this.image,
   });
 
-
-  factory CharacterModel.fromJson(Map<String, dynamic> json)
-  => _$CharacterModelFromJson(json);
+  factory CharacterModel.fromJson(Map<String, dynamic> json) =>
+      _$CharacterModelFromJson(json);
   Map<String, dynamic> toJson() => _$CharacterModelToJson(this);
 }

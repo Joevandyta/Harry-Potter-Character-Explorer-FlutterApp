@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 enum House {
@@ -7,8 +5,24 @@ enum House {
   gryffindor,
   slytherin,
   ravenclaw,
-  hufflepuff,
+  hufflepuff;
+
+  factory House.fromString(String? house) {
+    switch (house?.toLowerCase()) {
+      case "gryffindor":
+        return House.gryffindor;
+      case "slytherin":
+        return House.slytherin;
+      case "ravenclaw":
+        return House.ravenclaw;
+      case "hufflepuff":
+        return House.hufflepuff;
+      default:
+        return House.all;
+    }
+  }
 }
+
 extension HouseExtension on House {
   String get displayName {
     switch (this) {
@@ -24,7 +38,6 @@ extension HouseExtension on House {
         return "Hufflepuff";
     }
   }
-
 
   Color get primaryColor {
     switch (this) {
@@ -55,22 +68,6 @@ extension HouseExtension on House {
         return Colors.black26;
     }
   }
-
-  static House fromString(String? house) {
-    switch (house?.toLowerCase()) {
-      case "gryffindor":
-        return House.gryffindor;
-      case "slytherin":
-        return House.slytherin;
-      case "ravenclaw":
-        return House.ravenclaw;
-      case "hufflepuff":
-        return House.hufflepuff;
-      default:
-        return House.all;
-    }
-  }
-
 
   String get image {
     switch (this) {

@@ -9,10 +9,20 @@ class CharacterState {
   final Map<String, List<CharacterModel>> filteredCharacters;
   final String searchQuery;
 
-  CharacterState._({required this.status, this.error, required this.characters,required this.filteredCharacters, required this.searchQuery});
+  CharacterState({
+    required this.status,
+    this.error,
+    required this.characters,
+    required this.filteredCharacters,
+    required this.searchQuery,
+  });
 
-  factory CharacterState.initial() =>
-      CharacterState._(status: CharacterStatus.initial, characters: {}, filteredCharacters:{}, searchQuery: '');
+  factory CharacterState.initial() => CharacterState(
+    status: CharacterStatus.initial,
+    characters: {},
+    filteredCharacters: {},
+    searchQuery: '',
+  );
 
   CharacterState copyWith({
     CharacterStatus? status,
@@ -21,7 +31,7 @@ class CharacterState {
     Map<String, List<CharacterModel>>? filteredCharacters,
     String? searchQuery,
   }) {
-    return CharacterState._(
+    return CharacterState(
       status: status ?? this.status,
       error: error ?? this.error,
       characters: characters ?? this.characters,
@@ -30,5 +40,3 @@ class CharacterState {
     );
   }
 }
-
-

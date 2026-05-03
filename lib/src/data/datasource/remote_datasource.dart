@@ -12,9 +12,7 @@ class RemoteDataSource {
       final response = await dio.get('api/characters');
       if (response.statusCode == 200) {
         final List data = response.data;
-        return data
-            .map((e) => CharacterModel.fromJson(e))
-            .toList();
+        return data.map((e) => CharacterModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load characters");
       }
@@ -28,9 +26,7 @@ class RemoteDataSource {
       final response = await dio.get('api/characters/students');
       if (response.statusCode == 200) {
         final List data = response.data;
-        return data
-            .map((e) => CharacterModel.fromJson(e))
-            .toList();
+        return data.map((e) => CharacterModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load students");
       }
@@ -44,9 +40,7 @@ class RemoteDataSource {
       final response = await dio.get('api/characters/staff');
       if (response.statusCode == 200) {
         final List data = response.data;
-        return data
-            .map((e) => CharacterModel.fromJson(e))
-            .toList();
+        return data.map((e) => CharacterModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load staff");
       }
@@ -60,9 +54,7 @@ class RemoteDataSource {
       final response = await dio.get('/api/characters/house/$house');
       if (response.statusCode == 200) {
         final List data = response.data;
-        return data
-            .map((e) => CharacterModel.fromJson(e))
-            .toList();
+        return data.map((e) => CharacterModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load characters");
       }
