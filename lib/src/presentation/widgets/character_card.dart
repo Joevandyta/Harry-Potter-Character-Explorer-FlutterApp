@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:harry_potter_char_app/src/domain/models/character_model.dart';
 import 'package:harry_potter_char_app/src/domain/models/house_name.dart';
-import 'package:harry_potter_char_app/src/presentation/detail_screen.dart';
 
 class CharacterCard extends StatefulWidget {
   final CharacterModel character;
@@ -40,17 +40,10 @@ class _CharacterCardState extends State<CharacterCard>
       },
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) {
-                final charHouse = House.fromString(widget.character.house);
-                return DetailScreen(
-                  characterDetail: widget.character,
-                  house: charHouse,
-                );
-              },
-            ),
+          final charHouse = House.fromString(widget.character.house);
+          context.push(
+            '/details',
+            extra: {'character': widget.character, 'house': charHouse},
           );
         },
         child: _buildCharacterCard(widget.character),

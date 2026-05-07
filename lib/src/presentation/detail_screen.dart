@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harry_potter_char_app/src/domain/models/character_model.dart';
 import 'package:harry_potter_char_app/src/domain/models/house_name.dart';
+import 'package:harry_potter_char_app/src/presentation/providers/favorite_characters_notifier.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends ConsumerStatefulWidget {
   final CharacterModel characterDetail;
   final House house;
 
@@ -16,10 +18,10 @@ class DetailScreen extends StatefulWidget {
   });
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  ConsumerState<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends ConsumerState<DetailScreen> {
   final textContainerColor = Colors.grey.shade200;
   late final nameColor =
       widget.house == House.gryffindor ||
@@ -44,6 +46,27 @@ class _DetailScreenState extends State<DetailScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(widget.characterDetail.name),
+            actions: [
+              Consumer(
+                builder: (context, ref, child) {
+                  final isFavAsync = ref.watch(
+                    isFavoriteProvider(widget.characterDetail.id),
+                  );
+
+                  return IconButton(
+                    icon: Icon(
+                      isFavAsync ? Icons.favorite : Icons.favorite_border,
+                      color: isFavAsync ? Colors.red : nameColor,
+                    ),
+                    onPressed: () {
+                      ref
+                          .read(favoriteCharactersProvider.notifier)
+                          .toggleFavorite(widget.characterDetail);
+                    },
+                  );
+                },
+              ),
+            ],
           ),
           SliverToBoxAdapter(child: _characterDetailBody()),
           SliverFillRemaining(

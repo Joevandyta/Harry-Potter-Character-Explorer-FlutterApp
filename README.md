@@ -42,6 +42,19 @@ A premium, feature-rich Flutter application that allows you to explore the magic
 
 ---
 
+## 🌐 API Reference
+
+This application utilizes the **[HP-API](https://hp-api.onrender.com/)**, a free and open-source API providing comprehensive data about the Harry Potter universe.
+
+- **Base URL**: `https://hp-api.onrender.com/`
+- **Endpoints used**:
+  - `/api/characters`: Fetches all characters.
+  - `/api/characters/house/:house`: Fetches characters by house.
+  - `/api/characters/students`: Fetches all students.
+  - `/api/characters/staff`: Fetches all staff members.
+
+---
+
 ## 🏗️ Architecture
 
 The project follows a **Feature-Based Layered Architecture**, ensuring scalability and maintainability:

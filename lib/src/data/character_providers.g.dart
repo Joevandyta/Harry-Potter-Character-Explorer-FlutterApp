@@ -6,39 +6,134 @@ part of 'character_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$remoteDataSourceHash() => r'4066d7af766c0068a0d011312a91f26081830a45';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [remoteDataSource].
+@ProviderFor(localDataSource)
+final localDataSourceProvider = LocalDataSourceProvider._();
+
+final class LocalDataSourceProvider
+    extends
+        $FunctionalProvider<LocalDataSource, LocalDataSource, LocalDataSource>
+    with $Provider<LocalDataSource> {
+  LocalDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$localDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<LocalDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LocalDataSource create(Ref ref) {
+    return localDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LocalDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LocalDataSource>(value),
+    );
+  }
+}
+
+String _$localDataSourceHash() => r'81f739813cd8a73501a0e1698d325272366ac66b';
+
 @ProviderFor(remoteDataSource)
-final remoteDataSourceProvider = AutoDisposeProvider<RemoteDataSource>.internal(
-  remoteDataSource,
-  name: r'remoteDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$remoteDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final remoteDataSourceProvider = RemoteDataSourceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef RemoteDataSourceRef = AutoDisposeProviderRef<RemoteDataSource>;
-String _$repositoryHash() => r'e32e06124d7581a706deade689bd8ef4650bd67f';
+final class RemoteDataSourceProvider
+    extends
+        $FunctionalProvider<
+          RemoteDataSource,
+          RemoteDataSource,
+          RemoteDataSource
+        >
+    with $Provider<RemoteDataSource> {
+  RemoteDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'remoteDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [repository].
+  @override
+  String debugGetCreateSourceHash() => _$remoteDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<RemoteDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RemoteDataSource create(Ref ref) {
+    return remoteDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RemoteDataSource>(value),
+    );
+  }
+}
+
+String _$remoteDataSourceHash() => r'e8219a373ffce198c4bc82bc2c8b52f6a9913099';
+
 @ProviderFor(repository)
-final repositoryProvider = AutoDisposeProvider<Repository>.internal(
-  repository,
-  name: r'repositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$repositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final repositoryProvider = RepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef RepositoryRef = AutoDisposeProviderRef<Repository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class RepositoryProvider
+    extends $FunctionalProvider<Repository, Repository, Repository>
+    with $Provider<Repository> {
+  RepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'repositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$repositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<Repository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Repository create(Ref ref) {
+    return repository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Repository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Repository>(value),
+    );
+  }
+}
+
+String _$repositoryHash() => r'f9944edb05999466172a3931043d5a043ace49c9';

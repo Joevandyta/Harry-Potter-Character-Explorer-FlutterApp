@@ -5,4 +5,10 @@ abstract class Repository {
   Future<List<CharacterModel>> getCharacterInHouse(String house);
   Future<List<CharacterModel>> getStudents();
   Future<List<CharacterModel>> getStaff();
+  
+  // Favorites
+  Future<void> addFavorite(CharacterModel character);
+  Future<void> removeFavorite(String characterId);
+  Future<List<CharacterModel>> getFavorites();
+  Future<bool> isFavorite(String characterId);
 }
