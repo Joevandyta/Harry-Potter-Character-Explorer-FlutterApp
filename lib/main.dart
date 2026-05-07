@@ -7,7 +7,18 @@ import 'package:harry_potter_char_app/src/presentation/settings_screen.dart';
 import 'package:harry_potter_char_app/src/presentation/providers/character_notifier.dart';
 import 'package:harry_potter_char_app/src/presentation/widgets/main_scaffold.dart';
 
+import 'package:harry_potter_char_app/src/presentation/detail_screen.dart';
+import 'package:harry_potter_char_app/src/presentation/favorite_character_screen.dart';
+import 'package:harry_potter_char_app/src/domain/models/character_model.dart';
+import 'package:harry_potter_char_app/src/domain/models/favorite_character.dart';
+import 'package:harry_potter_char_app/src/data/character_providers.dart';
+import 'package:isar_community/isar.dart';
+import 'package:path_provider/path_provider.dart';
+
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final _router = GoRouter(
+  navigatorKey: _rootNavigatorKey,
   initialLocation: '/home',
   routes: [
     StatefulShellRoute.indexedStack(
@@ -33,12 +44,40 @@ final _router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: '/favorites',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const FavoriteCharacterScreen(),
+    ),
+    GoRoute(
+      path: '/details',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>;
+        final character = extras['character'] as CharacterModel;
+        final house = extras['house'] as House;
+        return DetailScreen(characterDetail: character, house: house);
+      },
+    ),
   ],
 );
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: HarryPotterApp()));
+  final dir = await getApplicationDocumentsDirectory();
+  final isar = await Isar.open(
+    [FavoriteCharacterSchema],
+    directory: dir.path,
+  );
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        isarProvider.overrideWithValue(isar),
+      ],
+      child: const HarryPotterApp(),
+    ),
+  );
 }
 
 class HarryPotterApp extends ConsumerWidget {
@@ -49,7 +88,7 @@ class HarryPotterApp extends ConsumerWidget {
     // Initial fetch
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(characterNotifierProvider.notifier)
+          .read(characterProvider.notifier)
           .getCharacters(House.all.displayName);
     });
 

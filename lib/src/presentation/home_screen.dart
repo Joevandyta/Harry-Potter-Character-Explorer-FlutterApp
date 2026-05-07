@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harry_potter_char_app/src/domain/models/character_model.dart';
 import 'package:harry_potter_char_app/src/domain/models/house_name.dart';
@@ -38,7 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(characterNotifierProvider);
+    final state = ref.watch(characterProvider);
 
     return Scaffold(
       backgroundColor: Colors.brown,
@@ -93,6 +94,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           return const SizedBox.shrink();
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.push('/favorites');
+        },
+        backgroundColor: Colors.brown.shade700,
+        foregroundColor: Colors.white,
+        elevation: 8,
+        child: const Icon(Icons.save_rounded),
+      ),
     );
   }
 
@@ -105,7 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   void _fetchData(House house) {
     ref
-        .read(characterNotifierProvider.notifier)
+        .read(characterProvider.notifier)
         .getCharacters(house.displayName);
   }
 
@@ -141,13 +151,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
                 onChanged: (query) {
                   ref
-                      .read(characterNotifierProvider.notifier)
+                      .read(characterProvider.notifier)
                       .searchCharacters(query);
                 },
                 onSubmitted: (query) {
                   if (query.isNotEmpty) {
                     ref
-                        .read(characterNotifierProvider.notifier)
+                        .read(characterProvider.notifier)
                         .searchCharacters(query);
                   }
                   setState(() {
@@ -225,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         return RefreshIndicator(
           onRefresh: () async {
             ref
-                .read(characterNotifierProvider.notifier)
+                .read(characterProvider.notifier)
                 .getCharacters(house.displayName);
           },
           child: GridView.builder(
